@@ -1,7 +1,7 @@
 from pico2d import *
 import random
 
-TUK_WIDTH, TUK_HEIGHT = 1280, 1024
+TUK_WIDTH, TUK_HEIGHT = 1280, 800
 
 
 def load_resources():
@@ -27,14 +27,17 @@ def handle_events():
 def reset_world():
     global running, cx, cy, frame
     global hx, hy
+    global sx, sy
+    global t
 
     running = True
     cx, cy = TUK_WIDTH // 2, TUK_HEIGHT // 2
     frame = 0
 
+    sx, sy = cx, cy # p1 : 시작점
     # hx, hy = TUK_WIDTH-50,TUK_HEIGHT-50
-    hx, hy = random.randint(0,TUK_WIDTH),random.randint(0,TUK_HEIGHT)
-
+    hx, hy = random.randint(0,TUK_WIDTH),random.randint(0,TUK_HEIGHT) # p2 : 끝점
+    t = 0.0
 
 def render_world():
     clear_canvas()
@@ -46,8 +49,15 @@ def render_world():
 
 def update_world():
     global frame
+    global cx, cy
+    global t
+
     frame = (frame + 1) % 8
 
+    if t<=1.0 :
+        cx = (1-t)*sx + t*hx    # cx는 시작x와 끝x를 1-t:t의 비율로 섞은 위치
+        cy = (1-t)*sy + t*hy
+        t += 0.001
 
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
 hide_cursor()
